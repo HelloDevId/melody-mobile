@@ -38,7 +38,7 @@
         android:layout_marginHorizontal="20dp"
         android:layout_width="match_parent"
         android:layout_height="50dp"
-        android:id="@+id/email"
+        android:id="@+id/etl_email"
         android:background="@drawable/custom_edit_text"
         android:drawableLeft="@drawable/ic_baseline_email_24"
         android:drawablePadding="8dp"
@@ -54,7 +54,7 @@
         android:layout_marginHorizontal="20dp"
         android:layout_width="match_parent"
         android:layout_height="50dp"
-        android:id="@+id/password"
+        android:id="@+id/etl_password"
         android:background="@drawable/custom_edit_text"
         android:drawableLeft="@drawable/ic_baseline_lock_24"
         android:drawablePadding="8dp"
@@ -78,6 +78,7 @@
         android:layout_marginTop="10dp"
         android:text="forgot password ?"/>
     <Button
+        android:id="@+id/btl_signin"
         android:layout_marginTop="50dp"
         android:layout_marginHorizontal="20dp"
         android:layout_width="match_parent"

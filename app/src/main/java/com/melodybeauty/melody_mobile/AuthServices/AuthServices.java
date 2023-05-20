@@ -4,6 +4,7 @@ import static android.content.Context.MODE_PRIVATE;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.util.Log;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
@@ -22,8 +23,8 @@ import java.util.Map;
 
 public class AuthServices {
     //connect host url
-    private static String HOST = "http://192.168.43.199:8000/";
-    private static String API = HOST + "api/";
+    private static String HOST = "http://192.168.0.118:8000";
+    private static String API = HOST + "/api/";
 
     //interface listener register
     public interface RegisterResponseListener {
@@ -38,7 +39,7 @@ public class AuthServices {
     //method request menggunakan library volley untuk register user
     public static void register(Context context, String name, String email, String password, RegisterResponseListener listener) {
 
-        StringRequest stringRequest = new StringRequest(Request.Method.POST, API + "auth/register", new Response.Listener<String>() {
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, "http://192.168.0.118:8000/api/auth/register", new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
                 try {
@@ -68,7 +69,7 @@ public class AuthServices {
                                 e.printStackTrace();
                                 listener.onError("Gagal register: " + e.getMessage());
                             }
-                        }else{
+                        } else {
                             listener.onError("Gagal register: network response is null");
                         }
                     }
@@ -78,8 +79,8 @@ public class AuthServices {
             protected Map<String, String> getParams() {
                 Map<String, String> params = new HashMap<>();
                 params.put("name", name);
-                params.put("password", password);
                 params.put("email", email);
+                params.put("password", password);
                 return params;
             }
         };
@@ -126,8 +127,10 @@ public class AuthServices {
                                 e.printStackTrace();
                                 listener.onError("Gagal Login: " + e.getMessage());
                             }
-                        }else{
+                        }
+                        else{
                             listener.onError("Gagal Login: network response is null");
+                            Log.e("AuthServices", "Error: " + error.getMessage());
                         }
                     }
                 })

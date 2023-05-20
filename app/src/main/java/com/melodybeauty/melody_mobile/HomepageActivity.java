@@ -1,0 +1,62 @@
+package com.melodybeauty.melody_mobile;
+
+import android.os.Bundle;
+
+import com.google.android.material.bottomnavigation.BottomNavigationView;
+
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
+import androidx.navigation.NavController;
+import androidx.navigation.Navigation;
+import androidx.navigation.ui.AppBarConfiguration;
+import androidx.navigation.ui.NavigationUI;
+
+import com.melodybeauty.melody_mobile.databinding.ActivityHomepageBinding;
+import com.melodybeauty.melody_mobile.fragment.ContentFragment;
+import com.melodybeauty.melody_mobile.fragment.HomeFragment;
+import com.melodybeauty.melody_mobile.fragment.ProfileFragment;
+
+public class HomepageActivity extends AppCompatActivity {
+
+    private ActivityHomepageBinding binding;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        binding = ActivityHomepageBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
+        BottomNavigationView navView = findViewById(R.id.nav_view);
+        replaceFragment(new HomeFragment());
+        binding.navView.setOnNavigationItemSelectedListener(item -> {
+            switch (item.getItemId()){
+                case R.id.navigation_home:
+                    replaceFragment(new HomeFragment());
+                    break;
+                case R.id.navigation_content:
+                    replaceFragment(new ContentFragment());
+                    break;
+                case R.id.navigation_profile:
+                    replaceFragment(new ProfileFragment());
+                    break;
+            }
+            return true;
+        });
+
+//        AppBarConfiguration appBarConfiguration = new AppBarConfiguration.Builder(
+//                R.id.navigation_home, R.id.navigation_content, R.id.navigation_profile)
+//                .build();
+//        NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_activity_homepage);
+//        NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
+//        NavigationUI.setupWithNavController(binding.navView, navController);
+
+    }
+    private  void replaceFragment(Fragment fragment){
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        fragmentTransaction.replace(R.id.frame_fragment,fragment);
+        fragmentTransaction.commit();
+    }
+}

@@ -2,6 +2,7 @@ package com.melodybeauty.melody_mobile;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -21,6 +22,7 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
     EditText etr_name,etr_email,etr_pass,etr_con_pass;
     Button btr_signup;
 
+    @SuppressLint("MissingInflatedId")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -28,12 +30,12 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
 
         iv_back = findViewById(R.id.iv_back);
         tv_signin = findViewById(R.id.tv_sign_in);
-        btr_signup = findViewById(R.id.btn_signup);
+        btr_signup = findViewById(R.id.btr_signup);
 
-        etr_name = findViewById(R.id.et_name);
-        etr_email = findViewById(R.id.et_email);
-        etr_pass = findViewById(R.id.et_password);
-        etr_con_pass = findViewById(R.id.et_conn_password);
+        etr_name = findViewById(R.id.etr_name);
+        etr_email = findViewById(R.id.etr_email);
+        etr_pass = findViewById(R.id.etr_password);
+        etr_con_pass = findViewById(R.id.etr_conn_password);
 
 
         iv_back.setOnClickListener(this);
@@ -73,7 +75,7 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
                 etr_pass.setError("Passwords cannot be different");
                 etr_con_pass.setError("Passwords cannot be different");
             } else {
-                AuthServices.register(this, name, email, password, new AuthServices.RegisterResponseListener() {
+                AuthServices.register(RegisterActivity.this, name, email, password, new AuthServices.RegisterResponseListener() {
                     @Override
                     public void onSuccess(JSONObject response) {
                         Toast.makeText(RegisterActivity.this, "Berhasil Mengaktifkan Akun Anda", Toast.LENGTH_LONG).show();
@@ -81,6 +83,7 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
 
                     @Override
                     public void onError(String message) {
+
                         Toast.makeText(RegisterActivity.this, message, Toast.LENGTH_LONG).show();
                     }
                 });

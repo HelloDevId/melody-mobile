@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".WelcomeActivity"
+    android:orientation="vertical"
+    android:background="@drawable/welcome">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/tx"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="250dp"
+        android:fontFamily="@font/lato_black"
+        android:text="Enjoy the extraordinary\nbenefits for your skin."
+        android:textColor="@color/white"
+        android:textSize="24dp"
+        android:textStyle="bold"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="230dp"
+        android:layout_marginTop="195dp"
+        android:background="@drawable/bg_welcome"
+        android:layout_marginBottom="100dp"
+        android:orientation="vertical"
+        android:padding="25dp">
+
+        <TextView
+            android:layout_marginTop="10dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/lato_bold"
+            android:text="Find the best skincare products for\nyour skin care."
+            android:textColor="@color/black"
+            android:textSize="16sp" />
+
+        <Button
+            android:id="@+id/btn_signin"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_marginTop="20dp"
+            android:fontFamily="@font/lato_bold"
+            android:text="Sign in"
+            android:background="@drawable/custom_button"
+            android:textAllCaps="false"
+            android:textSize="16sp" />
+        <LinearLayout
+            android:id="@+id/ll_create"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:layout_gravity="end"
+            android:orientation="horizontal">
+            <TextView
+                android:id="@+id/tx_create"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/lato_bold"
+                android:text="Or Create Account"
+                android:textColor="@color/black" />
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="16dp"
+                android:src="@drawable/ic_baseline_arrow_right_alt_24"/>
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+
+</LinearLayout>

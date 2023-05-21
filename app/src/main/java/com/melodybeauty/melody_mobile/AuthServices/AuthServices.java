@@ -97,7 +97,7 @@ public class AuthServices {
                     JSONObject jsonObject = new JSONObject(response);
                     String message = jsonObject.getString("message");
                     if (message.equals("Login berhasil")){
-                        JSONObject userObj = jsonObject.getJSONObject("user");
+                        JSONObject userObj = jsonObject.getJSONObject("data");
                         String token = jsonObject.getString("token");
                         SharedPreferences.Editor editor = context.getSharedPreferences("myPrefs", MODE_PRIVATE).edit();
                         editor.putString("token", token);

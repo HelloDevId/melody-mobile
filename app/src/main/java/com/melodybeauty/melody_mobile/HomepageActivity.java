@@ -44,14 +44,6 @@ public class HomepageActivity extends AppCompatActivity {
             }
             return true;
         });
-
-//        AppBarConfiguration appBarConfiguration = new AppBarConfiguration.Builder(
-//                R.id.navigation_home, R.id.navigation_content, R.id.navigation_profile)
-//                .build();
-//        NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_activity_homepage);
-//        NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
-//        NavigationUI.setupWithNavController(binding.navView, navController);
-
     }
     private  void replaceFragment(Fragment fragment){
         FragmentManager fragmentManager = getSupportFragmentManager();

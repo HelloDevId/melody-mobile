@@ -1,14 +1,23 @@
 package com.melodybeauty.melody_mobile.fragment;
 
+import android.annotation.SuppressLint;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentPagerAdapter;
+import androidx.viewpager.widget.ViewPager;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.google.android.material.tabs.TabLayout;
 import com.melodybeauty.melody_mobile.R;
+
+import java.util.ArrayList;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -56,11 +65,64 @@ public class HomeFragment extends Fragment {
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
     }
+    TabLayout tabLayout;
+    ViewPager viewPager;
 
+    @SuppressLint("MissingInflatedId")
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_home, container, false);
+        View view = inflater.inflate(R.layout.fragment_home, container, false);
+
+        tabLayout = view.findViewById(R.id.tab_layouts);
+        viewPager = view.findViewById(R.id.view_pager);
+
+        TabAdapter adapter = new TabAdapter(getParentFragmentManager());
+        adapter.AddFragment(new SemuaFragment(), "Semua");
+        adapter.AddFragment(new ArtikelFragment(), "Artikel");
+        adapter.AddFragment(new VideoFragment(), "Video");
+
+        viewPager.setAdapter(adapter);
+        tabLayout.setupWithViewPager(viewPager);
+        return view;
+    }
+
+    private class TabAdapter extends FragmentPagerAdapter {
+        //inialisasi array list
+        ArrayList<Fragment> fragmentArrayList = new ArrayList<>();
+        ArrayList<String> stringArrayList = new ArrayList<>();
+
+        //buat constructor
+        public void AddFragment(Fragment f, String s){
+            //tambah fragment
+            fragmentArrayList.add(f);
+            //tambah string(title)
+            stringArrayList.add(s);
+        }
+
+
+        public TabAdapter(@NonNull FragmentManager fm) {
+            super(fm);
+        }
+
+        @NonNull
+        @Override
+        public Fragment getItem(int position) {
+            //return posisi fragment
+            return fragmentArrayList.get(position);
+        }
+
+        @Override
+        public int getCount() {
+            //return fragment list size
+            return fragmentArrayList.size();
+        }
+
+        @Nullable
+        @Override
+        public CharSequence getPageTitle(int position) {
+            //return tab title
+            return stringArrayList.get(position);
+        }
     }
 }

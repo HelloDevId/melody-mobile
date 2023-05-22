@@ -22,7 +22,6 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
     EditText etr_name,etr_email,etr_pass,etr_con_pass;
     Button btr_signup;
 
-    @SuppressLint("MissingInflatedId")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

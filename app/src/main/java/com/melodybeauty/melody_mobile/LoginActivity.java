@@ -55,9 +55,15 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             AuthServices.login(LoginActivity.this, email, password, new AuthServices.LoginResponseListener() {
                 @Override
                 public void onSuccess(JSONObject response) {
-                    Toast.makeText(LoginActivity.this, "Ok", Toast.LENGTH_LONG).show();
-                    Intent i = new Intent(LoginActivity.this, HomepageActivity.class);
-                    startActivity(i);
+                    Toast.makeText(LoginActivity.this, "Berhasil Login", Toast.LENGTH_LONG).show();
+                    String defaultPassword = "melodybeauty";
+                    Intent intent;
+                    if (password.equals(defaultPassword)) {
+                        intent = new Intent(LoginActivity.this, RegisterActivity.class);
+                    } else {
+                        intent = new Intent(LoginActivity.this, HomepageActivity.class);
+                    }
+                    startActivity(intent);
                     finish();
                 }
 

@@ -9,16 +9,19 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
 import androidx.viewpager.widget.ViewPager;
-import androidx.viewpager2.widget.ViewPager2;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.google.android.material.tabs.TabLayout;
+import com.melodybeauty.melody_mobile.AuthServices.AuthServices;
+import com.melodybeauty.melody_mobile.Model.Kategori;
 import com.melodybeauty.melody_mobile.R;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -69,7 +72,6 @@ public class HomeFragment extends Fragment {
     TabLayout tabLayout;
     ViewPager viewPager;
 
-    @SuppressLint("MissingInflatedId")
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -78,14 +80,43 @@ public class HomeFragment extends Fragment {
         tabLayout = view.findViewById(R.id.tab_layouts);
         viewPager = view.findViewById(R.id.view_pager);
 
-        TabAdapter adapter = new TabAdapter(getParentFragmentManager());
+        AuthServices.kategori(getContext(), new AuthServices.KategoriResponseListener() {
+            @Override
+            public void onSuccess(List<Kategori> kategoris) {
+                setupTabLayout(kategoris);
+            }
+
+            @Override
+            public void onError(String message) {
+                Log.e("Error get kategori", message);
+            }
+        });
+        return view;
+    }
+    private void setupTabLayout(List<Kategori> kategoris) {
+        TabAdapter adapter = new TabAdapter(getChildFragmentManager());
+        adapter.AddFragment(new UntukAndaFragment(), "Untuk Anda");
         adapter.AddFragment(new SemuaFragment(), "Semua");
-        adapter.AddFragment(new ArtikelFragment(), "Artikel");
-        adapter.AddFragment(new VideoFragment(), "Video");
+
+            int kategoriCount = kategoris.size();
+            if (kategoriCount == 3) {
+                adapter.AddFragment(new FragmentKategori1(kategoris.get(0).getId()), kategoris.get(0).getName());
+                adapter.AddFragment(new FragmentKategori2(kategoris.get(1).getId()), kategoris.get(1).getName());
+                adapter.AddFragment(new FragmentKategori3(kategoris.get(2).getId()), kategoris.get(2).getName());
+            } else if (kategoriCount == 2) {
+                adapter.AddFragment(new FragmentKategori2(kategoris.get(0).getId()), kategoris.get(0).getName());
+                adapter.AddFragment(new FragmentKategori3(kategoris.get(1).getId()), kategoris.get(1).getName());
+            } else if (kategoriCount == 1) {
+                adapter.AddFragment(new FragmentKategori3(kategoris.get(0).getId()), kategoris.get(0).getName());
+            }
 
         viewPager.setAdapter(adapter);
         tabLayout.setupWithViewPager(viewPager);
-        return view;
+        int init = 1;
+        TabLayout.Tab initialTab = tabLayout.getTabAt(init);
+        if (initialTab != null) {
+            initialTab.select();
+        }
     }
 
     private class TabAdapter extends FragmentPagerAdapter {

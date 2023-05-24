@@ -1,14 +1,32 @@
 package com.melodybeauty.melody_mobile.fragment;
 
+import static android.content.Context.MODE_PRIVATE;
+
+import android.annotation.SuppressLint;
+import android.app.AlertDialog;
+import android.content.Intent;
+import android.content.SharedPreferences;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
+import android.widget.Toast;
 
+import com.melodybeauty.melody_mobile.AuthServices.AuthServices;
+import com.melodybeauty.melody_mobile.DetailProfile;
+import com.melodybeauty.melody_mobile.Model.User;
 import com.melodybeauty.melody_mobile.R;
+import com.melodybeauty.melody_mobile.WelcomeActivity;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -56,11 +74,111 @@ public class ProfileFragment extends Fragment {
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
     }
-
+    TextView tv_name, tv_email, tv_jk, tv_jkulit,tv_tgl,tv_nohp,tv_alamat;
+    Button btn_logout;
+    LinearLayout ll_detail;
+    @SuppressLint("MissingInflatedId")
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_profile, container, false);
+        View view =  inflater.inflate(R.layout.fragment_profile, container, false);
+
+        tv_name = view.findViewById(R.id.tvu_name);
+        tv_email = view.findViewById(R.id.tvu_email);
+        tv_jk = view.findViewById(R.id.tvu_jk);
+        tv_jkulit = view.findViewById(R.id.tvu_jkulit);
+        tv_tgl = view.findViewById(R.id.tvu_tl);
+        tv_nohp = view.findViewById(R.id.tvu_nohp);
+        tv_alamat = view.findViewById(R.id.tvu_alamat);
+        btn_logout = view.findViewById(R.id.btu_logout);
+        ll_detail = view.findViewById(R.id.ll_detailprofil);
+
+        //get token user
+        SharedPreferences preferences = getActivity().getSharedPreferences("myPrefs", MODE_PRIVATE);
+        String token = preferences.getString("token", "");
+
+        //get data user
+        AuthServices.getUserData(getContext(), token, new AuthServices.UserDataResponseListener() {
+            @Override
+            public void onSuccess(User user) {
+                String name = user.getName();
+                String email = user.getEmail();
+                String jenisKelamin = user.getJenisKelamin();
+                String jenisKulit = user.getJenisKulit();
+                String tgl = user.getTanggalLahir();
+                String nohp = user.getNoHp();
+                String alamat = user.getAlamat();
+                //set text textview
+                tv_name.setText(name);
+                tv_email.setText(email);
+                tv_jk.setText(jenisKelamin);
+                tv_jkulit.setText(jenisKulit);
+                tv_tgl.setText(tgl);
+                tv_nohp.setText(nohp);
+                tv_alamat.setText(alamat);
+            }
+
+            @Override
+            public void onError(String message) {
+                Log.e("get user data error", message);
+            }
+        });
+
+        //button logout
+        btn_logout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                AlertDialog.Builder alert =new AlertDialog.Builder(getActivity());
+                View alertView =LayoutInflater.from(getContext()).inflate(R.layout.popup_logout,
+                        (LinearLayout) v.findViewById(R.id.popup_box));
+                alert.setView(alertView);
+                final AlertDialog dialog = alert.create();
+                dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                dialog.show();
+                Button bt_batal, ok;
+                bt_batal = alertView.findViewById(R.id.btl_batal);
+                ok = alertView.findViewById(R.id.btl_ok);
+                bt_batal.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        dialog.cancel();
+                    }
+                });
+                ok.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                    AuthServices.logOut(getContext(), token, new AuthServices.LogoutResponseListener() {
+                        @Override
+                        public void onSuccess(String message) {
+                            Intent intent = new Intent(getActivity(), WelcomeActivity.class);
+                            startActivity(intent);
+                            getActivity().finish();
+                            SharedPreferences preferences = getActivity().getSharedPreferences("myPrefs", MODE_PRIVATE);
+                            SharedPreferences.Editor editor = preferences.edit();
+                            editor.remove("isLogin");
+                            editor.remove("token");
+                            editor.apply();
+                            Toast.makeText(getContext(), "Berhasil Logout", Toast.LENGTH_LONG).show();
+                        }
+
+                        @Override
+                        public void onError(String message) {
+                            Toast.makeText(getContext(), message, Toast.LENGTH_LONG).show();
+                        }
+                    });
+                    }
+                });
+            }
+        });
+
+        ll_detail.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(getContext(), DetailProfile.class);
+                startActivity(i);
+            }
+        });
+        return view;
     }
 }

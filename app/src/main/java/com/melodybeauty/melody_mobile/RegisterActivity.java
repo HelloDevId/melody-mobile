@@ -74,18 +74,18 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
                 etr_pass.setError("Passwords cannot be different");
                 etr_con_pass.setError("Passwords cannot be different");
             } else {
-                AuthServices.register(RegisterActivity.this, name, email, password, new AuthServices.RegisterResponseListener() {
-                    @Override
-                    public void onSuccess(JSONObject response) {
-                        Toast.makeText(RegisterActivity.this, "Berhasil Mengaktifkan Akun Anda", Toast.LENGTH_LONG).show();
-                    }
-
-                    @Override
-                    public void onError(String message) {
-
-                        Toast.makeText(RegisterActivity.this, message, Toast.LENGTH_LONG).show();
-                    }
-                });
+//                AuthServices.register(RegisterActivity.this, name, email, password, new AuthServices.RegisterResponseListener() {
+//                    @Override
+//                    public void onSuccess(JSONObject response) {
+//                        Toast.makeText(RegisterActivity.this, "Berhasil Mengaktifkan Akun Anda", Toast.LENGTH_LONG).show();
+//                    }
+//
+//                    @Override
+//                    public void onError(String message) {
+//
+//                        Toast.makeText(RegisterActivity.this, message, Toast.LENGTH_LONG).show();
+//                    }
+//                });
             }
         }
 

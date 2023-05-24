@@ -1,14 +1,20 @@
 package com.melodybeauty.melody_mobile.fragment;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
+import android.nfc.Tag;
+import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.widget.SearchView;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import android.text.TextUtils;
 import android.util.Log;
@@ -19,14 +25,20 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.melodybeauty.melody_mobile.Adapter.ProductAdapter;
 import com.melodybeauty.melody_mobile.AuthServices.AuthServices;
 import com.melodybeauty.melody_mobile.DetailProduct;
 import com.melodybeauty.melody_mobile.Model.Product;
 import com.melodybeauty.melody_mobile.R;
 
+import java.lang.annotation.Target;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -74,23 +86,32 @@ public class SemuaFragment extends Fragment {
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
     }
+
     RecyclerView recyclerView;
     List<Product> productList1 = new ArrayList<>();
+    CustomAdapterProduct customAdapterProduct;
+    LinearLayoutManager linearLayoutManager;
+
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_semua, container, false);
-        
+
         recyclerView = view.findViewById(R.id.rv_product);
-        LinearLayoutManager layoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
-        recyclerView.setLayoutManager(layoutManager);
+        linearLayoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
+        recyclerView.setLayoutManager(linearLayoutManager);
+        recyclerView.setHasFixedSize(true);
+        linearLayoutManager = (LinearLayoutManager) recyclerView.getLayoutManager();
+        customAdapterProduct = new CustomAdapterProduct(new ArrayList<>(), getContext());
         AuthServices.product(getContext(), new AuthServices.ProductResponseListener() {
             @Override
             public void onSuccess(List<Product> productList) {
-                CustomAdapterProduct customAdapter = new CustomAdapterProduct(productList, getContext());
-                recyclerView.setAdapter(customAdapter);
+                customAdapterProduct = new CustomAdapterProduct(productList, getContext());
+                recyclerView.setAdapter(customAdapterProduct);
                 productList1 = productList;
+                customAdapterProduct.notifyDataSetChanged();
             }
 
             @Override
@@ -100,6 +121,8 @@ public class SemuaFragment extends Fragment {
         });
         return view;
     }
+
+
     public static class CustomAdapterProduct extends RecyclerView.Adapter<CustomAdapterProduct.ViewHolder> {
         private List<Product> productList;
         private Context context;
@@ -122,12 +145,12 @@ public class SemuaFragment extends Fragment {
         public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
             holder.price.setText(productList.get(position).getPrice());
             holder.jumlah.setText(productList.get(position).getJumlahTerjual());
-            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSSSS'Z'");
+            SimpleDateFormat dateFormat = new SimpleDateFormat("dd MMMM yyyy");
             String formattedDate = dateFormat.format(productList.get(position).getCreatedAt());
             holder.date.setText(formattedDate);
             holder.name.setText(productList.get(position).getName());
             holder.desc.setText(productList.get(position).getDescription());
-            Glide.with(context).load(AuthServices.getImageProduct() + productList.get(position).getImage()).into(holder.img);
+            Glide.with(context).load(AuthServices.getImageProduct() + productList.get(position).getImage()).placeholder(R.drawable.placeholder_image).error(R.drawable.error_img).into(holder.img);
             holder.itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -145,6 +168,15 @@ public class SemuaFragment extends Fragment {
         public int getItemCount() {
             return productList.size();
         }
+
+        public void setProductList(List<Product> productList) {
+            this.productList = productList;
+        }
+
+        public List<Product> getProductList() {
+            return productList;
+        }
+
 
         public static class ViewHolder extends RecyclerView.ViewHolder {
             ImageView logo,img;
@@ -165,6 +197,7 @@ public class SemuaFragment extends Fragment {
 
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                     logo.setBackgroundResource(R.drawable.bg_logo);
+                    logo.setClipToOutline(true);
                 }
             }
         }

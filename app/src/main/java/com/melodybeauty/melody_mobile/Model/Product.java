@@ -11,11 +11,10 @@ public class Product implements Serializable {
     private String price;
     private String idKategori;
     private String jumlahTerjual;
-    private String deletedAt;
     private Date createdAt;
     private Date updateAt;
 
-    public Product(String id, String name, String image, String description, String price, String idKategori, String jumlahTerjual, String deletedAt, Date createdAt, Date updateAt) {
+    public Product(String id, String name, String image, String description, String price, String idKategori, String jumlahTerjual, Date createdAt, Date updateAt) {
         this.id = id;
         this.name = name;
         this.image = image;
@@ -23,7 +22,6 @@ public class Product implements Serializable {
         this.price = price;
         this.idKategori = idKategori;
         this.jumlahTerjual = jumlahTerjual;
-        this.deletedAt = deletedAt;
         this.createdAt = createdAt;
         this.updateAt = updateAt;
     }
@@ -56,9 +54,6 @@ public class Product implements Serializable {
         return jumlahTerjual;
     }
 
-    public String getDeletedAt() {
-        return deletedAt;
-    }
 
     public Date getCreatedAt() {
         return createdAt;

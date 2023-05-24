@@ -13,9 +13,9 @@
 
     <fragment
         android:id="@+id/navigation_content"
-        android:name="com.melodybeauty.melody_mobile.fragment.ContentFragment"
+        android:name="com.melodybeauty.melody_mobile.fragment.FragmentKategori2"
         android:label="Content"
-        tools:layout="@layout/fragment_content" />
+        tools:layout="@layout/fragment_kategori2" />
 
     <fragment
         android:id="@+id/navigation_profile"

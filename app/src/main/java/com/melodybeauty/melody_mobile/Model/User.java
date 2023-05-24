@@ -10,10 +10,8 @@ public class User {
     private String tanggalLahir;
     private String noHp;
     private String Alamat;
-    private String createdAt;
-    private String updateAt;
 
-    public User(String id, String name, String image, String email, String jenisKelamin, String jenisKulit, String tanggalLahir, String noHp, String alamat, String createdAt, String updateAt) {
+    public User(String id, String name, String image, String email, String jenisKelamin, String jenisKulit, String tanggalLahir, String noHp, String alamat) {
         this.id = id;
         this.name = name;
         this.image = image;
@@ -22,9 +20,7 @@ public class User {
         this.jenisKulit = jenisKulit;
         this.tanggalLahir = tanggalLahir;
         this.noHp = noHp;
-        Alamat = alamat;
-        this.createdAt = createdAt;
-        this.updateAt = updateAt;
+        this.Alamat = alamat;
     }
 
     public String getId() {
@@ -63,11 +59,4 @@ public class User {
         return Alamat;
     }
 
-    public String getCreatedAt() {
-        return createdAt;
-    }
-
-    public String getUpdateAt() {
-        return updateAt;
-    }
 }

@@ -28,12 +28,14 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.UnsupportedEncodingException;
+import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 import retrofit2.Callback;
@@ -334,10 +336,20 @@ public class AuthServices {
                                 String email = userObj.getString("email");
                                 String jenisKelamin = userObj.getString("jenis_kelamin");
                                 String JenisKulit = userObj.getString("jenis_kulit");
-                                String tgllahir = userObj.getString("tanggal_lahir");
+                                String dateStr = userObj.getString("tanggal_lahir");
                                 String nohp = userObj.getString("no_hp");
                                 String Alamat = userObj.getString("alamat");
-                                User user = new User(id, name,image,email,jenisKelamin, JenisKulit, tgllahir,nohp,Alamat);
+                                DateFormat inputFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
+                                DateFormat outputFormat = new SimpleDateFormat("dd MMMM yyyy", Locale.getDefault());
+                                Date date;
+                                String tgl = "";
+                                try {
+                                    date = inputFormat.parse(dateStr);
+                                    tgl = outputFormat.format(date);
+                                } catch (ParseException e) {
+                                    e.printStackTrace();
+                                }
+                                User user = new User(id, name,image,email,jenisKelamin, JenisKulit, tgl,nohp,Alamat);
                                 listener.onSuccess(user);
                             }
                         } catch (JSONException e){

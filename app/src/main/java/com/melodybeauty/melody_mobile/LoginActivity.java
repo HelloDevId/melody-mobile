@@ -43,14 +43,12 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
         iv_back = findViewById(R.id.iv_back);
-        tv_signup = findViewById(R.id.tv_sign_up);
 
         etl_email = findViewById(R.id.etl_email);
         etl_password = findViewById(R.id.etl_password);
         btl_signin = findViewById(R.id.btl_signin);
 
         iv_back.setOnClickListener(this);
-        tv_signup.setOnClickListener(this);
         btl_signin.setOnClickListener(this);
 
     }
@@ -77,7 +75,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
                 @Override
                 public void onError(String message) {
-                    Log.e("Error" , message);
+                   Toast.makeText(getApplicationContext(), message, Toast.LENGTH_LONG).show();
                 }
             });
         }

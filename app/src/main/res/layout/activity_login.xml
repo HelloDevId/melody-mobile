@@ -6,7 +6,8 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:padding="15dp"
-    tools:context=".LoginActivity">
+    tools:context=".LoginActivity"
+    android:background="@drawable/gradient_45">
 
     <ImageView
         android:id="@+id/iv_back"
@@ -88,27 +89,13 @@
         android:fontFamily="@font/lato_bold"
         android:text="Sign In"
         android:textSize="14sp"/>
-    <LinearLayout
+    <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:layout_marginTop="10dp"
-        android:orientation="horizontal">
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textSize="12sp"
-            android:textColor="@color/black"
-            android:text="don't have an account ? "
-            android:fontFamily="@font/lato_regular"/>
-        <TextView
-            android:id="@+id/tv_sign_up"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textSize="13sp"
-            android:textColor="@color/purple"
-            android:text="Sign up now"
-            android:fontFamily="@font/lato_bold"/>
-    </LinearLayout>
+        android:layout_marginTop="30dp"
+        android:fontFamily="@font/lato_regular"
+        android:textSize="12sp"
+        android:text="@string/melody"/>
 
 </LinearLayout>

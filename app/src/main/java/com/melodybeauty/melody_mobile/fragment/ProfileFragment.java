@@ -28,6 +28,11 @@ import com.melodybeauty.melody_mobile.Model.User;
 import com.melodybeauty.melody_mobile.R;
 import com.melodybeauty.melody_mobile.WelcomeActivity;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Locale;
+
 /**
  * A simple {@link Fragment} subclass.
  * Use the {@link ProfileFragment#newInstance} factory method to
@@ -74,7 +79,7 @@ public class ProfileFragment extends Fragment {
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
     }
-    TextView tv_name, tv_email, tv_jk, tv_jkulit,tv_tgl,tv_nohp,tv_alamat;
+    TextView tv_name, tv_email, tv_jk, tv_jkulit,tv_tgl,tv_nohp,tv_alamat, tv_umur;
     Button btn_logout;
     LinearLayout ll_detail;
     @SuppressLint("MissingInflatedId")
@@ -91,6 +96,7 @@ public class ProfileFragment extends Fragment {
         tv_tgl = view.findViewById(R.id.tvu_tl);
         tv_nohp = view.findViewById(R.id.tvu_nohp);
         tv_alamat = view.findViewById(R.id.tvu_alamat);
+        tv_umur = view.findViewById(R.id.tvu_umur);
         btn_logout = view.findViewById(R.id.btu_logout);
         ll_detail = view.findViewById(R.id.ll_detailprofil);
 
@@ -109,6 +115,23 @@ public class ProfileFragment extends Fragment {
                 String tgl = user.getTanggalLahir();
                 String nohp = user.getNoHp();
                 String alamat = user.getAlamat();
+                //umur
+                Calendar isToday = Calendar.getInstance();
+                Calendar isBirth = Calendar.getInstance();
+                isBirth.setTimeInMillis(System.currentTimeMillis());
+
+                try {
+                    SimpleDateFormat format = new SimpleDateFormat("dd MMMM yyyy", Locale.getDefault());
+                    isBirth.setTime(format.parse(tgl));
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+
+                int age = isToday.get(Calendar.YEAR) - isBirth.get(Calendar.YEAR);
+                if (isToday.get(Calendar.DAY_OF_YEAR) < isBirth.get(Calendar.DAY_OF_YEAR)) {
+                    age--; // Pengurangan umur jika belum melewati hari lahir di tahun ini
+                }
+                String umur = String.valueOf(age);
                 //set text textview
                 tv_name.setText(name);
                 tv_email.setText(email);
@@ -117,6 +140,7 @@ public class ProfileFragment extends Fragment {
                 tv_tgl.setText(tgl);
                 tv_nohp.setText(nohp);
                 tv_alamat.setText(alamat);
+                tv_umur.setText(umur);
             }
 
             @Override

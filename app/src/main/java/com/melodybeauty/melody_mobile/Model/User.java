@@ -1,5 +1,7 @@
 package com.melodybeauty.melody_mobile.Model;
 
+import java.util.Date;
+
 public class User {
     private String id;
     private String name;

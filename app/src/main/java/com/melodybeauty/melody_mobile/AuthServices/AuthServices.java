@@ -2,9 +2,11 @@ package com.melodybeauty.melody_mobile.AuthServices;
 
 import static android.content.Context.MODE_PRIVATE;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.util.Base64;
 import android.util.Log;
 
 import androidx.recyclerview.widget.RecyclerView;
@@ -16,6 +18,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.android.volley.toolbox.HurlStack;
 import com.melodybeauty.melody_mobile.HomepageActivity;
 import com.melodybeauty.melody_mobile.Model.Kategori;
 import com.melodybeauty.melody_mobile.Model.Post;
@@ -27,6 +30,9 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -88,6 +94,10 @@ public class AuthServices {
     }
     public interface PostResponseListener {
         void onSuccess(List<Post> posts);
+        void onError(String message);
+    }
+    public interface UpdateFotoResponseListener {
+        void onSuccess(JSONObject response);
         void onError(String message);
     }
     //method request menggunakan library volley untuk register user
@@ -599,5 +609,71 @@ public class AuthServices {
         };
         RequestQueue requestQueue = Volley.newRequestQueue(context);
         requestQueue.add(stringRequest);
+    }
+
+    public static void updatefoto(Context context, String token, String imagePath, final UpdateFotoResponseListener listener) {
+        String uploadUrl = API + "ufoto";
+
+        try {
+            File file = new File(imagePath);
+            FileInputStream fileInputStream = new FileInputStream(file);
+            byte[] byteArray = new byte[(int) file.length()];
+            fileInputStream.read(byteArray);
+
+            String encodedFile = Base64.encodeToString(byteArray, Base64.DEFAULT);
+
+            StringRequest stringRequest = new StringRequest(Request.Method.POST, uploadUrl,
+                    new Response.Listener<String>() {
+                        @Override
+                        public void onResponse(String response) {
+                            try {
+                                JSONObject jsonObject = new JSONObject(response);
+                                String message = jsonObject.getString("message");
+                                if (message.equals("Profile picture updated successfully")) {
+                                    listener.onSuccess(jsonObject);
+                                }
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                                listener.onError("Invalid JSON response");
+                            }
+                        }
+                    },
+                    new Response.ErrorListener() {
+                        @Override
+                        public void onErrorResponse(VolleyError error) {
+                            if (error.networkResponse != null && error.networkResponse.data != null) {
+                                try {
+                                    String responseBody = new String(error.networkResponse.data, "utf-8");
+                                    JSONObject jsonObject = new JSONObject(responseBody);
+                                    String message = jsonObject.getString("message");
+                                    listener.onError(message);
+                                } catch (JSONException | UnsupportedEncodingException e) {
+                                    e.printStackTrace();
+                                    listener.onError("Failed to update photo: " + e.getMessage());
+                                }
+                            } else {
+                                listener.onError("Failed to update: network response is null");
+                            }
+                        }
+                    }) {
+                @Override
+                public Map<String, String> getHeaders() throws AuthFailureError {
+                    Map<String, String> headers = new HashMap<>();
+                    headers.put("Authorization", "Bearer " + token);
+                    return headers;
+                }
+
+                @Override
+                protected Map<String, String> getParams() {
+                    Map<String, String> params = new HashMap<>();
+                    params.put("image", encodedFile);
+                    return params;
+                }
+            };
+
+            Volley.newRequestQueue(context).add(stringRequest);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }

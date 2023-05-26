@@ -57,6 +57,8 @@ public class AuthServices {
         return ImageProduct;
     }
 
+    public static String getApi(){return API;}
+
     public static String getImagePost() {
         return ImagePost;
     }

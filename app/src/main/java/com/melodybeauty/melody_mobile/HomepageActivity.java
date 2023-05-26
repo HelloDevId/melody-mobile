@@ -13,6 +13,7 @@ import androidx.fragment.app.FragmentTransaction;
 import com.melodybeauty.melody_mobile.databinding.ActivityHomepageBinding;
 import com.melodybeauty.melody_mobile.fragment.FragmentKategori2;
 import com.melodybeauty.melody_mobile.fragment.HomeFragment;
+import com.melodybeauty.melody_mobile.fragment.KonsultasiFragment;
 import com.melodybeauty.melody_mobile.fragment.ProfileFragment;
 
 public class HomepageActivity extends AppCompatActivity {
@@ -33,7 +34,7 @@ public class HomepageActivity extends AppCompatActivity {
                     replaceFragment(new HomeFragment());
                     break;
                 case R.id.navigation_content:
-                    replaceFragment(new FragmentKategori2());
+                    replaceFragment(new KonsultasiFragment());
                     break;
                 case R.id.navigation_profile:
                     replaceFragment(new ProfileFragment());

@@ -9,7 +9,7 @@
     <item
         android:id="@+id/navigation_content"
         android:icon="@drawable/ic_baseline_assignment_24"
-        android:title="Content" />
+        android:title="Konsultasi" />
 
     <item
         android:id="@+id/navigation_profile"
